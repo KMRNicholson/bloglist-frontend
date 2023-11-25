@@ -1,4 +1,8 @@
-const Notification = ({ type, message }) => {
+import { useNotificationObject } from "./contexts/NotificationContext";
+
+const Notification = () => {
+  const notification = useNotificationObject();
+
   const style = {
     background: "lightgrey",
     fontSize: 20,
@@ -6,6 +10,7 @@ const Notification = ({ type, message }) => {
     borderRadius: 5,
     padding: 10,
     marginBottom: 10,
+    display: notification.display,
   };
 
   const styles = {
@@ -20,8 +25,8 @@ const Notification = ({ type, message }) => {
   };
 
   return (
-    <div id="notification" style={styles[type]}>
-      {message}
+    <div id="notification" style={styles[notification.type]}>
+      {notification.message}
     </div>
   );
 };
