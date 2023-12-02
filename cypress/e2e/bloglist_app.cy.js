@@ -101,7 +101,7 @@ describe("BlogList app", function () {
       cy.get("#author-input").type(blog.author);
       cy.get("#url-input").type(blog.url);
       cy.get("#create-button").click();
-      cy.get("#view-button").click();
+      cy.get(`a[href*="/blogs/"]`).click();
 
       cy.get("#blog-likes").contains("0");
       cy.get("#like-button").click();
@@ -122,20 +122,20 @@ describe("BlogList app", function () {
       cy.get("#create-button").click();
       cy.wait(1000);
 
-      cy.get(".blog")
-        .contains(`${blog2.title} ${blog2.author}`)
-        .within(() => {
-          cy.get("#view-button").click();
-        });
+      cy.get(`a[href*="/blogs/"]`).eq(1).click();
 
       cy.get("#blog-likes").contains("0");
       cy.get("#like-button").click();
       cy.get("#blog-likes").contains("1");
-      cy.get("#hide-blog-button").click();
       cy.wait(1000);
+      cy.go("back");
 
-      cy.get(".blog").eq(0).should("contain", `${blog2.title} ${blog2.author}`);
-      cy.get(".blog").eq(1).should("contain", `${blog.title} ${blog.author}`);
+      cy.get(`a[href*="/blogs/"]`)
+        .eq(0)
+        .should("contain", `${blog2.title} ${blog2.author}`);
+      cy.get(`a[href*="/blogs/"]`)
+        .eq(1)
+        .should("contain", `${blog.title} ${blog.author}`);
     });
 
     it("allows user to delete a blog", function () {
@@ -148,10 +148,11 @@ describe("BlogList app", function () {
       cy.contains("Blog created successfully");
       cy.contains(`${blog.title} ${blog.author}`);
 
-      cy.get("#view-button").click();
-      cy.get(".blog-detailed");
+      cy.get(`a[href*="/blogs/"]`).click();
+      cy.get(".blog");
       cy.get("#remove-button").click();
-      cy.get(".blog-detailed").should("not.exist");
+      cy.wait(1000);
+      cy.get(`${blog.title} ${blog.author}`).should("not.exist");
     });
 
     it("does not show user delete button for blogs they do not own", function () {
@@ -166,7 +167,7 @@ describe("BlogList app", function () {
       cy.get("#password").type(user2.password);
       cy.get("#login-button").click();
 
-      cy.get("#view-button").click();
+      cy.get(`a[href*="/blogs/"]`).click();
       cy.get("#remove-button").should("not.exist");
     });
   });
