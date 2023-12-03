@@ -1,12 +1,17 @@
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { login } from "./reducers/authReducer";
 import {
   useNotificationDispatch,
   showNotification,
 } from "../shared/contexts/NotificationContext";
-import { login } from "./reducers/authReducer";
-import { useDispatch } from "react-redux";
+
+import { Button, Stack, Input } from "@mui/joy";
+import Notification from "../shared/Notification";
 
 const Login = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const notificationDispatch = useNotificationDispatch();
 
   const loginUser = (event) => {
@@ -20,23 +25,20 @@ const Login = () => {
         type: "error",
       });
     });
+
+    navigate("/blogs");
   };
 
   return (
     <div>
       <h2>Log in</h2>
+      <Notification />
       <form onSubmit={loginUser}>
-        <div>
-          <label htmlFor="username">Username:</label>
-          <input id="username" type="text" name="username" />
-        </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input id="password" type="password" name="password" />
-        </div>
-        <button id="login-button" type="submit">
-          login
-        </button>
+        <Stack spacing={1}>
+          <Input name="username" placeholder="Username" />
+          <Input name="password" type="password" placeholder="Password" />
+          <Button type="submit">Login</Button>
+        </Stack>
       </form>
     </div>
   );
