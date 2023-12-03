@@ -36,14 +36,14 @@ const Login = () => {
     const username = event.target.username.value;
     const password = event.target.password.value;
 
-    dispatch(login(username, password)).catch((error) => {
-      showNotification(notificationDispatch, {
-        message: error,
-        type: "error",
+    dispatch(login(username, password))
+      .then(() => navigate("/blogs"))
+      .catch((error) => {
+        showNotification(notificationDispatch, {
+          message: error,
+          type: "error",
+        });
       });
-    });
-
-    navigate("/blogs");
   };
 
   return (
@@ -51,7 +51,10 @@ const Login = () => {
       <Box sx={widthStyle("100%", 400)}>
         <form onSubmit={loginUser}>
           <Stack spacing={1}>
-            <Typography sx={centerContent} variant="h4">
+            <Typography
+              sx={{ ...centerContent, fontFamily: "cursive" }}
+              variant="h4"
+            >
               Blogger
             </Typography>
             <TextField name="username" placeholder="Username" />
