@@ -4,7 +4,7 @@ import {
   useNotificationDispatch,
   showNotification,
 } from "../shared/contexts/NotificationContext";
-import { remove, like } from "./reducers/blogsReducer";
+import { remove, like, comment } from "./reducers/blogsReducer";
 
 const Blog = ({ blog }) => {
   const dispatch = useDispatch();
@@ -33,12 +33,25 @@ const Blog = ({ blog }) => {
     }
   };
 
+  const addComment = (blog) => (event) => {
+    event.preventDefault();
+
+    const newComment = event.target.comment.value;
+
+    dispatch(comment(blog, newComment));
+    event.target.comment.value = "";
+  };
+
   const likeBlog = (blog) => () => dispatch(like(blog));
 
   return (
     <div className={`${className}`}>
       <h3>{blog.title}</h3>
-      <div className={`${className}-url`}>{blog.url}</div>
+      <div className={`${className}-url`}>
+        <a href={blog.url} target="_blank">
+          {blog.url}
+        </a>
+      </div>
       <div id={`${className}-likes`} className={`${className}-likes`}>
         {blog.likes} likes
       </div>
@@ -52,6 +65,15 @@ const Blog = ({ blog }) => {
         </button>
       )}
       <h4>comments</h4>
+      <form onSubmit={addComment(blog)}>
+        <div>
+          <label htmlFor="comment-input" />
+          <input id="comment-input" type="text" name="comment" />
+          <button id="add-comment" type="submit">
+            add comment
+          </button>
+        </div>
+      </form>
       <ul>
         {blog.comments.map((comment) => (
           <li>{comment}</li>

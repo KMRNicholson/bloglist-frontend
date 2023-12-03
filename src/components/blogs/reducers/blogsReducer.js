@@ -16,10 +16,17 @@ const blogsSlice = createSlice({
           ? blog
           : { ...blog, likes: action.payload.likes }
       )),
+    updateComments: (state, action) =>
+      (state = state.map((blog) =>
+        blog.id !== action.payload.id
+          ? blog
+          : { ...blog, comments: action.payload.comments }
+      )),
   },
 });
 
-const { set, append, removeById, incrementLikesById } = blogsSlice.actions;
+const { set, append, removeById, incrementLikesById, updateComments } =
+  blogsSlice.actions;
 
 export const create = (blog) => async (dispatch) => {
   try {
@@ -49,6 +56,13 @@ export const like = (blog) => async (dispatch) => {
   const likes = blog.likes + 1;
   await blogsService.updateById(id, { likes: likes });
   dispatch(incrementLikesById({ id: id, likes: likes }));
+};
+
+export const comment = (blog, comment) => async (dispatch) => {
+  const id = blog.id;
+  const comments = [...blog.comments, comment];
+  await blogsService.updateById(id, { comments: comments });
+  dispatch(updateComments({ id: id, comments: comments }));
 };
 
 export default blogsSlice.reducer;
