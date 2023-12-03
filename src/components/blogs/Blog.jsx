@@ -76,7 +76,7 @@ const Blog = ({ blog }) => {
       </form>
       <ul>
         {blog.comments.map((comment) => (
-          <li>{comment}</li>
+          <li key={comment}>{comment}</li>
         ))}
       </ul>
     </div>

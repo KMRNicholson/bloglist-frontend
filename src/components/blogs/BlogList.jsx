@@ -26,7 +26,7 @@ const BlogList = ({ blogs }) => {
       <BlogForm />
       <h3>Saved Blogs</h3>
       {blogs.map((blog) => (
-        <div style={style}>
+        <div key={blog.id} style={style}>
           <Link to={`/blogs/${blog.id}`}>
             {blog.title} {blog.author}
           </Link>
