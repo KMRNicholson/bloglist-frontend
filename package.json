@@ -12,6 +12,9 @@
     "cypress:open": "cypress open"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/joy": "^5.0.0-beta.16",
     "@reduxjs/toolkit": "^1.9.7",
     "@tanstack/react-query": "^5.0.0",
     "axios": "^1.4.0",
