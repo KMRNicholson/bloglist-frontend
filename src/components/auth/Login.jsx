@@ -6,7 +6,14 @@ import {
   showNotification,
 } from "../shared/contexts/NotificationContext";
 
-import { Button, Stack, Input } from "@mui/joy";
+import {
+  Button,
+  Stack,
+  TextField,
+  Container,
+  Typography,
+  Box,
+} from "@mui/material";
 import Notification from "../shared/Notification";
 
 const Login = () => {
@@ -14,33 +21,52 @@ const Login = () => {
   const navigate = useNavigate();
   const notificationDispatch = useNotificationDispatch();
 
+  const centerContent = {
+    justifyContent: "center",
+    display: "flex",
+  };
+
+  const widthStyle = (widthPercent, maxWidth) => ({
+    width: widthPercent,
+    maxWidth: maxWidth,
+  });
+
   const loginUser = (event) => {
     event.preventDefault();
     const username = event.target.username.value;
     const password = event.target.password.value;
 
-    dispatch(login(username, password)).catch((error) => {
-      showNotification(notificationDispatch, {
-        message: error,
-        type: "error",
+    dispatch(login(username, password))
+      .then(() => navigate("/blogs"))
+      .catch((error) => {
+        showNotification(notificationDispatch, {
+          message: error,
+          type: "error",
+        });
       });
-    });
-
-    navigate("/blogs");
   };
 
   return (
-    <div>
-      <h2>Log in</h2>
+    <Container sx={centerContent}>
+      <Box sx={widthStyle("100%", 400)}>
+        <form onSubmit={loginUser}>
+          <Stack spacing={1}>
+            <Typography
+              sx={{ ...centerContent, fontFamily: "cursive" }}
+              variant="h4"
+            >
+              Blogger
+            </Typography>
+            <TextField name="username" placeholder="Username" />
+            <TextField name="password" type="password" placeholder="Password" />
+            <Button variant="contained" type="submit">
+              Sign in
+            </Button>
+          </Stack>
+        </form>
+      </Box>
       <Notification />
-      <form onSubmit={loginUser}>
-        <Stack spacing={1}>
-          <Input name="username" placeholder="Username" />
-          <Input name="password" type="password" placeholder="Password" />
-          <Button type="submit">Login</Button>
-        </Stack>
-      </form>
-    </div>
+    </Container>
   );
 };
 
