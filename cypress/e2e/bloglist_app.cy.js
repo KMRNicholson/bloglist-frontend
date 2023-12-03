@@ -51,12 +51,14 @@ describe("BlogList app", function () {
       title: "Test Blog",
       author: "Test Author",
       url: "http://some.url",
+      comments: ["This is a really cool blog", "Another one"],
     };
 
     const blog2 = {
       title: "Test Blog2",
       author: "Test Author2",
       url: "http://some.url2",
+      comments: ["This is a really cool blog 2", "Another one 2"],
     };
 
     beforeEach(function () {
@@ -108,6 +110,24 @@ describe("BlogList app", function () {
       cy.get("#blog-likes").contains("1");
     });
 
+    it("allows users to add comments", function () {
+      cy.get("#new-blog-toggle").click();
+      cy.get("#title-input").type(blog.title);
+      cy.get("#author-input").type(blog.author);
+      cy.get("#url-input").type(blog.url);
+      cy.get("#create-button").click();
+      cy.visit("http://localhost:3003");
+      cy.get("#username").type(user2.username);
+      cy.get("#password").type(user2.password);
+      cy.get("#login-button").click();
+
+      cy.get(`a[href*="/blogs/"]`).click();
+      cy.get("#comment-input").type(blog.comments[0]);
+      cy.get("#add-comment").click();
+      cy.wait(500);
+      cy.contains(blog.comments[0]);
+    });
+
     it("sorts blogs by most likes first", function () {
       cy.get("#new-blog-toggle").click();
       cy.get("#title-input").type(blog.title);
@@ -156,7 +176,6 @@ describe("BlogList app", function () {
     });
 
     it("does not show user delete button for blogs they do not own", function () {
-      cy.on("window:confirm", () => true);
       cy.get("#new-blog-toggle").click();
       cy.get("#title-input").type(blog.title);
       cy.get("#author-input").type(blog.author);
